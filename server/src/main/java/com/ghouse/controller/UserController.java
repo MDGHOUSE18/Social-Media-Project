@@ -16,52 +16,54 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ghouse.model.User;
 import com.ghouse.service.UserServiceImp;
 
+
+
 @RestController
-@RequestMapping("/users")
+//@RequestMapping("/users")
 public class UserController {
 	@Autowired
 	UserServiceImp userServiceImp;
 	
 	
-	@PostMapping
+	@PostMapping("/users")
 	public User registerUser(@RequestBody User user) {
 		return userServiceImp.registerUser(user);
 	}
 	
-	@GetMapping("/getallusers")
+	@GetMapping("/api/users/getallusers")
 	public List<User> getAllUsers() {
 		
 		return userServiceImp.getAllUsers();
 	}
 	
-	@GetMapping("/id/{id}")
+	@GetMapping("/users/id/{id}")
 	public User getUserById(@PathVariable Integer id) throws Exception {
 		return userServiceImp.findUserById(id);
 	}
 	
-	@GetMapping("/email/{email}")
+	@GetMapping("/users/email/{email}")
 	public User getUserByEmail(@PathVariable String email) throws Exception {
 		return userServiceImp.findUserByEmail(email);
 	}
 	
-	@PutMapping("/follow/{reqUserId}/{followUserId}")
+	@PutMapping("/users/follow/{reqUserId}/{followUserId}")
 	public User followUserHandler(@PathVariable Integer reqUserId,@PathVariable Integer followUserId) throws Exception {
 		return userServiceImp.followUser(reqUserId, followUserId);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/users/{id}")
 	public User updateUser(@PathVariable Integer id,@RequestBody User user) throws Exception {
 		return userServiceImp.updateUserById(id,user);
 	}
 	
-	@GetMapping("/search")
+	@GetMapping("/users/search")
 	public List<User> searchUser(@RequestParam String query){
 		System.out.println(query);
 		return userServiceImp.serchUser(query);
 		
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/users/{id}")
 	public String deleteUser(@PathVariable Integer id) throws Exception {
 		System.out.println("Received ID: " + id);
 		return userServiceImp.deleteUser(id);
