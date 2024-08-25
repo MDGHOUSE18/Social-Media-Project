@@ -19,9 +19,6 @@ public class UserServiceImp implements UserService{
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
-	
-
-	
 	@Override
 	public User registerUser(User user) {
 		userRepository.save(user);

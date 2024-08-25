@@ -20,7 +20,6 @@ public class JwtProvider {
 	public static SecretKey key=Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
 	
 	public static String generateToken(Authentication authentication) {
-		System.out.println(authentication.getName());
 		Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .claims()

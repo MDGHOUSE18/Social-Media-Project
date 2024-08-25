@@ -1,17 +1,18 @@
 package com.ghouse.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ghouse.config.JwtProvider;
+
 import com.ghouse.model.User;
-import com.ghouse.repository.UserRepository;
+
+import com.ghouse.request.LoginRequest;
 import com.ghouse.response.AuthResponse;
+import com.ghouse.service.AuthService;
+
 
 
 @RestController
@@ -19,30 +20,24 @@ import com.ghouse.response.AuthResponse;
 public class AuthController {
 
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	AuthService authService;
 	
 	@PostMapping("/register")
 	public AuthResponse registerUser(@RequestBody User user) throws Exception {
 		
-		System.out.println(user.getEmail());
-		
-		User isExists=userRepository.findByEmail(user.getEmail());
-		if(isExists!=null) {
-			throw new Exception("This email already have account.Please Login...");
-		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		
-		userRepository.save(user);
-		
-		Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-		
-		String token = JwtProvider.generateToken(authentication);
-		
-		AuthResponse response= new AuthResponse(token,"Register Successfull");
-		System.out.println(response);
-		return response;
+		return authService.userRegistration(user);
 	}
+	@PostMapping("/login")
+	public AuthResponse userLogin(@RequestBody LoginRequest loginRequest) throws Exception {
+		
+		return authService.userLogin(loginRequest);
+	}
+	
+	@PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        authService.userLogout();
+        return ResponseEntity.ok("Logout Successful");
+    }
+
+	
 }
