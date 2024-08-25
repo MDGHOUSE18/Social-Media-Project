@@ -25,10 +25,13 @@ public class UserController {
 	UserServiceImp userServiceImp;
 	
 	
-	@PostMapping("/users")
-	public User registerUser(@RequestBody User user) {
-		return userServiceImp.registerUser(user);
+	@PostMapping("/createusers")
+	public User getAllUsers(@RequestBody User user) {
+		System.out.println();
+		return user;
 	}
+	
+	
 	
 	@GetMapping("/api/users/getallusers")
 	public List<User> getAllUsers() {

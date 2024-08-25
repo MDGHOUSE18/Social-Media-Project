@@ -8,7 +8,7 @@ import com.ghouse.model.User;
 
 public interface UserService {
 	
-	public void initializeUsers();
+//	public void initializeUsers();
 	
 	public User registerUser(User user);
 	
