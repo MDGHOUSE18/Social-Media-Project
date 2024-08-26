@@ -9,67 +9,72 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ghouse.model.User;
+import com.ghouse.service.JWTService;
+import com.ghouse.service.UserService;
 import com.ghouse.service.UserServiceImp;
 
 
 
 @RestController
-//@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 	@Autowired
-	UserServiceImp userServiceImp;
-	
-	
-	@PostMapping("/createusers")
-	public User getAllUsers(@RequestBody User user) {
-		System.out.println();
-		return user;
-	}
+	UserService userService;
 	
 	
 	
-	@GetMapping("/api/users/getallusers")
+	@GetMapping("/getallusers")
 	public List<User> getAllUsers() {
 		
-		return userServiceImp.getAllUsers();
+		return userService.getAllUsers();
 	}
 	
-	@GetMapping("/users/id/{id}")
+	@GetMapping("/id/{id}")
 	public User getUserById(@PathVariable Integer id) throws Exception {
-		return userServiceImp.findUserById(id);
+		return userService.findUserById(id);
 	}
 	
-	@GetMapping("/users/email/{email}")
+	@GetMapping("/email/{email}")
 	public User getUserByEmail(@PathVariable String email) throws Exception {
-		return userServiceImp.findUserByEmail(email);
+		return userService.findUserByEmail(email);
 	}
 	
-	@PutMapping("/users/follow/{reqUserId}/{followUserId}")
-	public User followUserHandler(@PathVariable Integer reqUserId,@PathVariable Integer followUserId) throws Exception {
-		return userServiceImp.followUser(reqUserId, followUserId);
+	@PutMapping("/follow/{followUserId}")
+	public User followUserHandler(@RequestHeader("Authorization") String token,@PathVariable Integer followUserId) throws Exception {
+		User reqUser = userService.getUserFromToken(token);
+		
+		return userService.followUser(reqUser.getId(), followUserId);
 	}
 	
-	@PutMapping("/users/{id}")
-	public User updateUser(@PathVariable Integer id,@RequestBody User user) throws Exception {
-		return userServiceImp.updateUserById(id,user);
+	@PutMapping("/")
+	public User updateUser(@RequestHeader("Authorization") String token,@RequestBody User user) throws Exception {
+		User reqUser = userService.getUserFromToken(token);
+		return userService.updateUserById(reqUser.getId(),user);
 	}
 	
-	@GetMapping("/users/search")
+	@GetMapping("/search")
 	public List<User> searchUser(@RequestParam String query){
 		System.out.println(query);
-		return userServiceImp.serchUser(query);
+		return userService.serchUser(query);
 		
 	}
 	
 	@DeleteMapping("/users/{id}")
 	public String deleteUser(@PathVariable Integer id) throws Exception {
 		System.out.println("Received ID: " + id);
-		return userServiceImp.deleteUser(id);
+		return userService.deleteUser(id);
 	}
+	@GetMapping("/profile")
+	public User findUserBYtoken(@RequestHeader("Authorization") String token) throws Exception{		
+		return userService.getUserFromToken(token);
+		
+	}
+	
 	
 }

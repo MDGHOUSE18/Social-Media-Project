@@ -1,5 +1,6 @@
 package com.ghouse.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -11,11 +12,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import jakarta.servlet.Filter;
-
 @Configuration
 @EnableWebSecurity
 public class AppConfig {
+	
+	@Autowired
+	JwtFilter jwtFilter;
 	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -27,7 +29,7 @@ public class AppConfig {
 	                .anyRequest().authenticated())
 	        .httpBasic(Customizer.withDefaults())
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-	        .addFilterBefore(new jwtValidator(), UsernamePasswordAuthenticationFilter.class)
+	        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 	        .build();
 	}
 	

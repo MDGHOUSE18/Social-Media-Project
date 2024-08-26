@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ghouse.config.JwtProvider;
 import com.ghouse.model.User;
 import com.ghouse.repository.UserRepository;
 import com.ghouse.request.LoginRequest;
@@ -29,6 +28,9 @@ public class AuthServiceImp implements AuthService{
 	@Autowired
 	private CustomerUserDetailService customerUserDetailService;
 	
+	@Autowired
+	JWTService jwtService;
+	
 	@Override
 	public AuthResponse userRegistration(User user) throws Exception {
 		User isExists=userRepository.findByEmail(user.getEmail());
@@ -41,7 +43,7 @@ public class AuthServiceImp implements AuthService{
 		
 		Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
 		
-		String token = JwtProvider.generateToken(authentication);
+		String token = jwtService.generateToken(authentication);
 		
 		AuthResponse response= new AuthResponse(token,"Register Successfull");
 		System.out.println(response.getMessage());
@@ -51,7 +53,7 @@ public class AuthServiceImp implements AuthService{
 	@Override
 	public AuthResponse userLogin(LoginRequest loginRequest) throws Exception{
 		Authentication authentication = authenticate(loginRequest.getEmail(),loginRequest.getPassword()); 
-		String token = JwtProvider.generateToken(authentication);
+		String token = jwtService.generateToken(authentication);
 		AuthResponse response= new AuthResponse(token,"Login Successfull");
 		System.out.println(response.getMessage());
 		return response;

@@ -19,6 +19,9 @@ public class UserServiceImp implements UserService{
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	JWTService jwtService;
+	
 	@Override
 	public User registerUser(User user) {
 		userRepository.save(user);
@@ -60,6 +63,9 @@ public class UserServiceImp implements UserService{
 		if(oldUser.getPassword()!=null) {
 			oldUser.setPassword(user.getPassword());
 		}
+		if(oldUser.getGender()!=null) {
+			oldUser.setGender(user.getGender());
+		}
 		User updatedUser=userRepository.save(oldUser);
 		return updatedUser;
 	}
@@ -97,6 +103,18 @@ public class UserServiceImp implements UserService{
 	public List<User> serchUser(String query) {
 		List<User> users = userRepository.searchUsers(query);
 		return users;
+	}
+
+	@Override
+	public User getUserFromToken(String token) throws Exception {
+		
+		if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7).trim();
+        }
+		String email = jwtService.extractUserName(token);
+		System.out.println(email);
+		User user= findUserByEmail(email);
+		return user;
 	}
 	
 }

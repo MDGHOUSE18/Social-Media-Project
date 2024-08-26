@@ -25,6 +25,8 @@ public interface UserService {
 	public User updateUserById(Integer id,User user) throws Exception;
 	
 	public String deleteUser(Integer id) throws Exception;
+	
+	public User getUserFromToken(String token) throws Exception;
 
 	
 	

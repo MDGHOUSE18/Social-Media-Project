@@ -15,8 +15,8 @@ public class DataInitializer {
     @Autowired
     UserService userService;
 
-    @Bean
-    ApplicationRunner initializer() {
-        return args -> userService.initializeUsers();
-    }
+//    @Bean
+//    ApplicationRunner initializer() {
+//        return args -> userService.initializeUsers();
+//    }
 }
