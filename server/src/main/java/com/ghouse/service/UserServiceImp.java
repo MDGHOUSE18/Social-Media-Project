@@ -51,19 +51,19 @@ public class UserServiceImp implements UserService{
 			throw new Exception("user not exist with id "+id);
 		}
 		User oldUser=user1.get();
-		if(oldUser.getFirstName()!=null) {
+		if(user.getFirstName()!=null) {
 			oldUser.setFirstName(user.getFirstName());
 		}
-		if(oldUser.getLastName()!=null) {
+		if(user.getLastName()!=null) {
 			oldUser.setLastName(user.getLastName());
 		}
-		if(oldUser.getEmail()!=null) {
+		if(user.getEmail()!=null) {
 			oldUser.setEmail(user.getEmail());
 		}
-		if(oldUser.getPassword()!=null) {
+		if(user.getPassword()!=null) {
 			oldUser.setPassword(user.getPassword());
 		}
-		if(oldUser.getGender()!=null) {
+		if(user.getGender()!=null) {
 			oldUser.setGender(user.getGender());
 		}
 		User updatedUser=userRepository.save(oldUser);
@@ -91,8 +91,14 @@ public class UserServiceImp implements UserService{
 		User reqUser=findUserById(reqUserId);
 		User followuser=findUserById(followUserId);
 		
-		followuser.getFollowers().add(reqUser.getId());
-		reqUser.getFollowing().add(followUserId);
+		if(!reqUser.getFollowing().contains(followUserId)) {
+			followuser.getFollowers().add(reqUser.getId());
+			reqUser.getFollowing().add(followUserId);
+		}else {
+			followuser.getFollowers().remove(reqUser.getId());
+			reqUser.getFollowing().remove(followUserId);
+		}
+		
 		
 		userRepository.save(reqUser);
 		userRepository.save(followuser);
