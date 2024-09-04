@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ghouse.exceptions.PostException;
 import com.ghouse.model.Post;
 import com.ghouse.model.User;
 import com.ghouse.repository.PostRepository;
@@ -25,7 +26,7 @@ public class PostServiceImp implements PostService{
 	UserRepository userRepository;
 
 	@Override
-	public Post createPost(Post post, Integer userId) throws Exception {
+	public Post createPost(Post post, Integer userId) throws PostException {
 		
 		User user=userService.findUserById(userId);
 		
@@ -41,38 +42,38 @@ public class PostServiceImp implements PostService{
 	}
 
 	@Override
-	public String deletePost(Integer postId, Integer userId) throws Exception {
+	public String deletePost(Integer postId, Integer userId) throws PostException {
 		Post post=findPostById(postId);
 		User user= userService.findUserById(userId);
 		if(post.getUser().getId()!=user.getId()) {
-			throw new Exception("You can't delete another user post");
+			throw new PostException("You can't delete another user post");
 		}
 		return "Post deleted sucessfully";
 	}
 
 	@Override
-	public List<Post> findPostByUserId(Integer userId) throws Exception {
+	public List<Post> findPostByUserId(Integer userId) throws PostException {
 		
 		return postRepository.findPostByUserId(userId);
 	}
 
 	@Override
-	public Post findPostById(Integer postId) throws Exception {
+	public Post findPostById(Integer postId) throws PostException {
 		Optional<Post> post=postRepository.findById(postId);
 		if(post.isEmpty()) {
-			throw new Exception("Post is not fount with this id "+postId);
+			throw new PostException("Post is not fount with this id "+postId);
 		}
 		return post.get();
 	}
 
 	@Override
-	public List<Post> findAllPost() throws Exception {
+	public List<Post> findAllPost() throws PostException {
 		
 		return postRepository.findAll();
 	}
 
 	@Override
-	public Post savedPost(Integer postId, Integer userId) throws Exception {
+	public Post savedPost(Integer postId, Integer userId) throws PostException {
 		Post post=findPostById(postId);
 		User user= userService.findUserById(userId);
 		
@@ -86,7 +87,7 @@ public class PostServiceImp implements PostService{
 	}
 
 	@Override
-	public Post likePost(Integer postId, Integer userId) throws Exception {
+	public Post likePost(Integer postId, Integer userId) throws PostException {
 		Post post=findPostById(postId);
 		User user= userService.findUserById(userId);
 		
@@ -100,7 +101,7 @@ public class PostServiceImp implements PostService{
 	}
 
 	@Override
-	public Post editPost(Integer postId,Post post) throws Exception {
+	public Post editPost(Integer postId,Post post) throws PostException {
 //		Post originalPost=findPostById(postId);
 //		originalPost.setCaption(post.getCaption());
 //		originalPost.set

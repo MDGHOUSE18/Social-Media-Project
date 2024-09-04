@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ghouse.exceptions.CommentException;
 import com.ghouse.model.Comment;
 import com.ghouse.model.Post;
 import com.ghouse.model.User;
@@ -32,7 +33,7 @@ public class CommentServiceImp implements CommentService{
 	@Override
 	public Comment createComment(Comment comment, 
 			Integer postId, 
-			Integer userId) throws Exception {
+			Integer userId) throws CommentException {
 		User user = userService.findUserById(userId);
 		Post post = postService.findPostById(postId);
 		
@@ -51,17 +52,17 @@ public class CommentServiceImp implements CommentService{
 
 	
 	@Override
-	public Comment findCommentById(Integer commentId) throws Exception{
+	public Comment findCommentById(Integer commentId) throws CommentException{
 		Optional<Comment> opt = commentRepository.findById(commentId);
 		
 		if(opt.isEmpty()) {
-			throw new Exception("Comment Not Exists");
+			throw new CommentException("Comment Not Exists");
 		}
 		return opt.get();
 	}
 	
 	@Override
-	public Comment likeComment(Integer commentId, Integer userId) throws Exception {
+	public Comment likeComment(Integer commentId, Integer userId) throws CommentException {
 		Comment comment = findCommentById(commentId);
 		User user = userService.findUserById(userId);
 		

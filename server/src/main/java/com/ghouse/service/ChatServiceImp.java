@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ghouse.exceptions.ChatException;
 import com.ghouse.model.Chat;
 import com.ghouse.model.User;
 import com.ghouse.repository.ChatRepository;
@@ -34,11 +35,11 @@ public class ChatServiceImp implements ChatService{
 	}
 
 	@Override
-	public Chat findChatById(Integer chatId) throws Exception {
+	public Chat findChatById(Integer chatId) throws ChatException {
 		
 		Optional<Chat> opt = chatRepository.findById(chatId);
 		if(opt.isEmpty()) {
-			throw new Exception("chat not found with id - "+chatId);
+			throw new ChatException("chat not found with id - "+chatId);
 		}
 		return opt.get();
 	}

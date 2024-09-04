@@ -1,12 +1,12 @@
 package com.ghouse.service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ghouse.exceptions.StoryException;
 import com.ghouse.model.Story;
 import com.ghouse.model.User;
 import com.ghouse.repository.StoryRepository;
@@ -33,7 +33,7 @@ public class StoryServiceImp implements StoryService{
 	}
 
 	@Override
-	public List<Story> findStoryById(Integer userId) throws Exception {
+	public List<Story> findStoryById(Integer userId) throws StoryException {
 		userService.findUserById(userId);
 		return storyRepository.findByUserId(userId);
 	}

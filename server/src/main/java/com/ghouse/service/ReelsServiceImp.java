@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ghouse.exceptions.ReelsException;
 import com.ghouse.model.Reels;
 import com.ghouse.model.User;
 import com.ghouse.repository.ReelsRepository;
@@ -38,7 +39,7 @@ public class ReelsServiceImp implements ReelsService{
 	}
 
 	@Override
-	public List<Reels> findUserReels(Integer userId) throws Exception {
+	public List<Reels> findUserReels(Integer userId) throws ReelsException {
 		userService.findUserById(userId);
 		return reelsRepository.findByUserId(userId);
 	}

@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ghouse.exceptions.ChatException;
+import com.ghouse.exceptions.MessageException;
 import com.ghouse.model.Chat;
 import com.ghouse.model.Message;
 import com.ghouse.model.User;
@@ -25,7 +27,7 @@ public class MessageSrviceImp implements MessageService{
 	private ChatRepository chatRepository;
 	
 	@Override
-	public Message createMessage(User user, Integer chatId, Message req) throws Exception {
+	public Message createMessage(User user, Integer chatId, Message req) throws MessageException {
 		
 		Message message = new Message();
 		
@@ -46,7 +48,7 @@ public class MessageSrviceImp implements MessageService{
 	}
 
 	@Override
-	public List<Message> findChatMessages(Integer chatId) throws Exception {
+	public List<Message> findChatMessages(Integer chatId) throws ChatException {
 		Chat chat = chatService.findChatById(chatId);
 		
 		return messageRepository.findByChatId(chatId);

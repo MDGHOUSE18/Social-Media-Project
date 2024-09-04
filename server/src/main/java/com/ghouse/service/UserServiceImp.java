@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ghouse.exceptions.UserException;
 import com.ghouse.model.User;
 import com.ghouse.repository.UserRepository;
 
@@ -35,20 +36,20 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	public User findUserById(Integer id) throws Exception {
+	public User findUserById(Integer id) throws UserException {
 		Optional<User> user = userRepository.findById(id);
 		if(user.isEmpty()) {
-			throw new Exception("user not exist with id "+id);
+			throw new UserException("user not exist with id "+id);
 		}
 		return user.get();
 	}
 
 	@Override
-	public User updateUserById(Integer id, User user) throws Exception {
+	public User updateUserById(Integer id, User user) throws UserException {
 		Optional<User> user1 = userRepository.findById(id);
 		
 		if(user1.isEmpty()) {
-			throw new Exception("user not exist with id "+id);
+			throw new UserException("User not found with id: " + id);
 		}
 		User oldUser=user1.get();
 		if(user.getFirstName()!=null) {
@@ -71,23 +72,23 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	public String deleteUser(Integer id) throws Exception {
+	public String deleteUser(Integer id) throws UserException {
 		Optional<User> user=userRepository.findById(id);
 		if(user.isEmpty()) {
-			throw new Exception("User not exists with this id "+id);
+			throw new UserException("User not exists with this id "+id);
 		}
 		return "User deleted sucessfully with this is "+id;
 	}
 
 
 	@Override
-	public User findUserByEmail(String email) throws Exception {
+	public User findUserByEmail(String email) throws UserException {
 		User user=userRepository.findByEmail(email);
 		return user;
 	}
 
 	@Override
-	public User followUser(Integer reqUserId, Integer followUserId) throws Exception {
+	public User followUser(Integer reqUserId, Integer followUserId) throws UserException {
 		User reqUser=findUserById(reqUserId);
 		User followuser=findUserById(followUserId);
 		
@@ -112,7 +113,7 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	public User getUserFromToken(String token) throws Exception {
+	public User getUserFromToken(String token) throws UserException {
 		
 		if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7).trim();
