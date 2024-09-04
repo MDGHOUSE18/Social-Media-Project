@@ -1,5 +1,6 @@
 package com.ghouse.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class ReelsServiceImp implements ReelsService{
 		Reels createReel  = new Reels();
 		createReel.setTitle(reel.getTitle());
 		createReel.setUser(user);
+		createReel.setCreatedAt(LocalDateTime.now());
 		createReel.setVideo(reel.getVideo());
 		return reelsRepository.save(createReel);
 	}
